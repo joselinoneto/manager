@@ -38,6 +38,18 @@ public struct Apod: Identifiable, Hashable {
         self.copyright = item.copyright
     }
     
+    init(_ item: ApodStorage) {
+        self.id = item.id
+        self.date = item.date
+        self.explanation = item.explanation
+        self.mediaType = item.mediaType
+        self.thumbnailUrl = item.thumbnailUrl
+        self.title = item.title
+        self.url = item.url
+        self.hdurl = item.hdurl
+        self.copyright = item.copyright
+    }
+    
     init() {
         self.id = nil
         self.date = nil
@@ -53,12 +65,12 @@ public struct Apod: Identifiable, Hashable {
     //MARK: Computed Properties
     private let hdSufix: String = "hd"
 
-    public var currentDate: Date? {
-        date?.date
+    public var currentDate: Date {
+        date?.date ?? Date()
     }
     
     public var formattedDate: String? {
-        currentDate?.dateString(ofStyle: .full)
+        currentDate.dateString(ofStyle: .full)
     }
     
     public var formattedExplanation: String? {
