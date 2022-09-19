@@ -14,16 +14,20 @@ public class DateManagerController {
     public func buildTimeline() {
         guard let initialDate: Date = Date(year: 2020) else { return }
         guard let today: Date = Date() else { return }
+        let todayNumber: Int = today.day
         var items: [TimelineYear] = []
         
         for year in initialDate.year...today.year {
             var timelineYear: TimelineYear = TimelineYear(value: year.string, months: [])
             for month in 1...12 {
+                let futureDate: Date? = Date(year: year, month: month, day: todayNumber)
+                if futureDate?.isInFuture ?? false {
+                    break
+                }
                 timelineYear.months.append(.init(value: month.string, year: timelineYear))
             }
             items.append(timelineYear)
         }
-        
         self.items = items
     }
     
@@ -36,10 +40,10 @@ public protocol Timeline {
 
 public struct TimelineMonth: Timeline, Identifiable, Hashable {
     public static func == (lhs: TimelineMonth, rhs: TimelineMonth) -> Bool {
-        lhs.value == rhs.value
+        lhs.id == rhs.id
     }
     public var value: String
-    public var id: String { value }
+    public var id: String { title }
     public var year: TimelineYear
     
     public var startMonth: String {
@@ -51,7 +55,11 @@ public struct TimelineMonth: Timeline, Identifiable, Hashable {
     
     public var endMonth: String {
         guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
-        let dateReturn = date.end(of: .month)
+        var dateReturn = date.end(of: .month)
+        if dateReturn?.isInFuture ?? false {
+            dateReturn = Date()
+        }
+        
         let formatedString: String = dateReturn?.string(withFormat: "YYYY-MM-dd") ?? ""
         return formatedString
     }

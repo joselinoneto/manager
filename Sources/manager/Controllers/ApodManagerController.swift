@@ -50,6 +50,14 @@ public class ApodManagerController {
         try? await downloadContent(items: items)
     }
     
+    public func getMonthData(startDate: String, endDate: String) async throws {
+        let response = try? await apiController.getMonthsApods(startDate: startDate, endDate: endDate)
+        deleteAllData()
+        try? await saveItems(response?.items)
+        guard let items = response?.items.compactMap({ Apod($0) }) else { return }
+        try? await downloadContent(items: items)
+    }
+    
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let realm = try! await Realm()
         DispatchQueue.main.async {
@@ -79,6 +87,13 @@ public class ApodManagerController {
         guard let itemDelete = realm.object(ofType: ApodStorage.self, forPrimaryKey: item.id) else { return }
         try! realm.write {
             realm.delete(itemDelete)
+        }
+    }
+    
+    public func deleteAllData() {
+        let realm = try! Realm()
+        try! realm.write {
+            realm.deleteAll()
         }
     }
 }
