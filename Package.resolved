@@ -1,6 +1,24 @@
 {
   "pins" : [
     {
+      "identity" : "apiclient",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:joselinoneto/apiclient.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "bc9d24b1cfc63edc97216c4ec7522a47edb6d393"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
+      "state" : {
+        "branch" : "master",
+        "revision" : "6299daec1d74be12164fec090faf9ed14d0da9d6"
+      }
+    },
+    {
       "identity" : "realm-core",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core",
@@ -25,6 +43,24 @@
       "state" : {
         "revision" : "933f27d8e7fa0bf8200a5d6235e0de383b801126",
         "version" : "5.3.0"
+      }
+    },
+    {
+      "identity" : "toolboxapiclient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joselinoneto/ToolboxAPIClient",
+      "state" : {
+        "revision" : "4fe2e381f21fa47643adf3db2b06fe61813c6bf7",
+        "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "tools",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:joselinoneto/tools.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "0edbfc4230a975a2dbde4eb104712743ff8d7e24"
       }
     }
   ],

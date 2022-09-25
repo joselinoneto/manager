@@ -16,6 +16,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "5.0.0"),
+        .package(url: "git@github.com:joselinoneto/apiclient.git", branch: "main"),
         .package(name: "Realm", url: "https://github.com/realm/realm-swift", branch: "master")
     ],
     targets: [
@@ -23,7 +24,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "manager",
-            dependencies: ["SwifterSwift", .product(name: "RealmSwift", package: "Realm")]),
+            dependencies: ["SwifterSwift", "apiclient", .product(name: "RealmSwift", package: "Realm")]),
         .testTarget(
             name: "managerTests",
             dependencies: ["manager"]),
