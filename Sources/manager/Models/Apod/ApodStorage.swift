@@ -12,6 +12,7 @@ import apiclient
 class ApodStorage: Object {
     @Persisted var id: UUID?
     @Persisted var date: String?
+    @Persisted var postedDate: Date?
     @Persisted var explanation: String?
     @Persisted var mediaType: String?
     @Persisted var thumbnailUrl: String?
@@ -28,10 +29,11 @@ class ApodStorage: Object {
         "id"
     }
     
-    convenience init(id: UUID, date: String, explanation: String, mediaType: String, thumbnailUrl: String, title: String, url: String, hdurl: String, copyright: String) {
+    convenience init(id: UUID, date: String, postedDate: Date?, explanation: String, mediaType: String, thumbnailUrl: String, title: String, url: String, hdurl: String, copyright: String) {
         self.init()
         self.id = id
         self.date = date
+        self.postedDate = postedDate
         self.explanation = explanation
         self.mediaType = mediaType
         self.thumbnailUrl = thumbnailUrl
@@ -44,6 +46,7 @@ class ApodStorage: Object {
     init(_ item: NasaApodDto) {
         self.id = item.id
         self.date = item.date
+        self.postedDate = item.postedDate
         self.explanation = item.explanation
         self.mediaType = item.mediaType
         self.thumbnailUrl = item.thumbnailUrl
