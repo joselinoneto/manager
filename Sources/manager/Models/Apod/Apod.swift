@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwifterSwift
 import tools
 import apiclient
 
@@ -17,14 +16,14 @@ public struct Apod: Identifiable, Hashable {
     }
     
     public var id: UUID?
-    public let date: String?
-    public let explanation: String?
-    public let mediaType: String?
-    public let thumbnailUrl: String?
-    public let title: String?
-    public let url: String?
-    public let hdurl: String?
-    public let copyright: String?
+    public var date: String?
+    public var explanation: String?
+    public var mediaType: String?
+    public var thumbnailUrl: String?
+    public var title: String?
+    public var url: String?
+    public var hdurl: String?
+    public var copyright: String?
     
     init(_ item: NasaApodDto) {
         self.id = item.id
