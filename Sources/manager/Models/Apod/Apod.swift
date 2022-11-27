@@ -8,6 +8,7 @@
 import Foundation
 import tools
 import apiclient
+import storageclient
 
 //TODO: Remove downloadfile method and weak reference and change apod to struct
 public struct Apod: Identifiable, Hashable {
