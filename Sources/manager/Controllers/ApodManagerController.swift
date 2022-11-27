@@ -18,13 +18,10 @@ public class ApodManagerController {
     private let apiController: NasaApodManagerAPI
     private let storageController: ApodStorageController
     private var cancellables: Set<AnyCancellable> = []
-    //private let dbQueue: DatabaseQueue?
-    public static let shared: ApodManagerController = ApodManagerController()
     
-    init() {
-        let dbFile: String = "\(FileStorage.shared.folderUrl?.absoluteString ?? "")/apod.sqlite"
+    init(pathToSqlite: String?) {
         apiController = NasaApodManagerAPI()
-        storageController = ApodStorageController(pathToSqlite: dbFile)
+        storageController = ApodStorageController(pathToSqlite: pathToSqlite)
         getLocalData()
     }
     
