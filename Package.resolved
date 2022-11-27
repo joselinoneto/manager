@@ -3,10 +3,19 @@
     {
       "identity" : "apiclient",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:joselinoneto/apiclient.git",
+      "location" : "https://github.com/joselinoneto/apiclient",
       "state" : {
-        "branch" : "main",
-        "revision" : "bc9d24b1cfc63edc97216c4ec7522a47edb6d393"
+        "revision" : "ceb9577763b85b16925503fac381e27381f6ed04",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "grdb.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/GRDB.swift.git",
+      "state" : {
+        "revision" : "2d31ed46183d46927eec91f3421ef3c24f75e93d",
+        "version" : "6.3.1"
       }
     },
     {
@@ -14,26 +23,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
       "state" : {
-        "branch" : "master",
-        "revision" : "6299daec1d74be12164fec090faf9ed14d0da9d6"
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
       }
     },
     {
-      "identity" : "realm-core",
+      "identity" : "storageclient",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/realm/realm-core",
+      "location" : "https://github.com/joselinoneto/storageclient",
       "state" : {
-        "revision" : "5da7744b4056ad185c025bccf0924f17f73f7a91",
-        "version" : "12.6.0"
-      }
-    },
-    {
-      "identity" : "realm-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/realm/realm-swift",
-      "state" : {
-        "branch" : "master",
-        "revision" : "a4e41b471f5ee702c63f2b81b87dc6302fe20e49"
+        "revision" : "77e72875b14c32852018a1ebb2982a060178e89b",
+        "version" : "1.0.1"
       }
     },
     {
@@ -55,12 +55,21 @@
       }
     },
     {
+      "identity" : "toolboxstorageclient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joselinoneto/ToolboxStorageClient",
+      "state" : {
+        "revision" : "725f187548839b8b17236d6bb623ea53a16c7669",
+        "version" : "1.0.1"
+      }
+    },
+    {
       "identity" : "tools",
       "kind" : "remoteSourceControl",
       "location" : "git@github.com:joselinoneto/tools.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "0edbfc4230a975a2dbde4eb104712743ff8d7e24"
+        "revision" : "971f3003b819ef973455e0f3b51138c892db59fc",
+        "version" : "1.0.2"
       }
     }
   ],

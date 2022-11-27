@@ -6,42 +6,20 @@
 //
 
 import Foundation
-import RealmSwift
 import apiclient
+import GRDB
 
-class ApodStorage: Object {
-    @Persisted var id: UUID?
-    @Persisted var date: String?
-    @Persisted var postedDate: Date?
-    @Persisted var explanation: String?
-    @Persisted var mediaType: String?
-    @Persisted var thumbnailUrl: String?
-    @Persisted var title: String?
-    @Persisted var url: String?
-    @Persisted var hdurl: String?
-    @Persisted var copyright: String?
-    
-    override init() {
-        super.init()
-    }
-    
-    override class func primaryKey() -> String? {
-        "id"
-    }
-    
-    convenience init(id: UUID, date: String, postedDate: Date?, explanation: String, mediaType: String, thumbnailUrl: String, title: String, url: String, hdurl: String, copyright: String) {
-        self.init()
-        self.id = id
-        self.date = date
-        self.postedDate = postedDate
-        self.explanation = explanation
-        self.mediaType = mediaType
-        self.thumbnailUrl = thumbnailUrl
-        self.title = title
-        self.url = url
-        self.hdurl = hdurl
-        self.copyright = copyright
-    }
+class ApodStorage: Codable, FetchableRecord, PersistableRecord  {
+    var id: UUID?
+    var date: String?
+    var postedDate: Date?
+    var explanation: String?
+    var mediaType: String?
+    var thumbnailUrl: String?
+    var title: String?
+    var url: String?
+    var hdurl: String?
+    var copyright: String?
     
     init(_ item: NasaApodDto) {
         self.id = item.id
