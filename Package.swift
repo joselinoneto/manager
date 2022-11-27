@@ -13,12 +13,9 @@ let package = Package(
             targets: ["manager"]),
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
-        //.package(url: "git@github.com:joselinoneto/apiclient.git", branch: "main"),
+        .package(url: "https://github.com/joselinoneto/apiclient", from: "1.0.0"),
         .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "5.3.0"),
-        .package(path: "../apiclient"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", from: "6.3.1")
+        .package(url: "https://github.com/joselinoneto/storageclient", from: "1.0.0"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -28,7 +25,7 @@ let package = Package(
             dependencies: [
                 "SwifterSwift",
                 "apiclient",
-                .product(name: "GRDB", package: "GRDB.swift")
+                "storageclient"
             ]),
         .testTarget(
             name: "managerTests",

@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "apiclient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joselinoneto/apiclient",
+      "state" : {
+        "revision" : "ceb9577763b85b16925503fac381e27381f6ed04",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "grdb.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
@@ -14,8 +23,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
       "state" : {
-        "branch" : "master",
-        "revision" : "6299daec1d74be12164fec090faf9ed14d0da9d6"
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "storageclient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joselinoneto/storageclient",
+      "state" : {
+        "revision" : "77e72875b14c32852018a1ebb2982a060178e89b",
+        "version" : "1.0.1"
       }
     },
     {
@@ -34,6 +52,24 @@
       "state" : {
         "revision" : "4fe2e381f21fa47643adf3db2b06fe61813c6bf7",
         "version" : "1.1.1"
+      }
+    },
+    {
+      "identity" : "toolboxstorageclient",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/joselinoneto/ToolboxStorageClient",
+      "state" : {
+        "revision" : "725f187548839b8b17236d6bb623ea53a16c7669",
+        "version" : "1.0.1"
+      }
+    },
+    {
+      "identity" : "tools",
+      "kind" : "remoteSourceControl",
+      "location" : "git@github.com:joselinoneto/tools.git",
+      "state" : {
+        "revision" : "971f3003b819ef973455e0f3b51138c892db59fc",
+        "version" : "1.0.2"
       }
     }
   ],
