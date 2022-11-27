@@ -19,7 +19,7 @@ public class ApodManagerController {
     private let storageController: ApodStorageController
     private var cancellables: Set<AnyCancellable> = []
     
-    init(pathToSqlite: String?) {
+    public init(pathToSqlite: String?) {
         apiController = NasaApodManagerAPI()
         storageController = ApodStorageController(pathToSqlite: pathToSqlite)
         getLocalData()
