@@ -41,8 +41,6 @@ public class ApodManagerController {
     public func getRemoteData(per: Int, page: Int) async throws {
         let response = try? await apiController.getApods(per: per, page: page)
         saveItems(response?.items)
-        guard let items = response?.items.compactMap({ Apod($0) }) else { return }
-        try? await downloadContent(items: items)
     }
     
     public func getMonthData(currentMonth: TimelineMonth) async throws {
@@ -50,8 +48,6 @@ public class ApodManagerController {
         let response = try? await apiController.getMonthsApods(startDate: currentMonth.startMonth,
                                                                endDate: currentMonth.endMonth)
         saveItems(response?.items)
-        guard let items = response?.items.compactMap({ Apod($0) }) else { return }
-        try? await downloadContent(items: items)
     }
     
     private func saveItems(_ items: [NasaApodDto]?) {
@@ -59,7 +55,7 @@ public class ApodManagerController {
             storageController.saveItems(itemsAdd)
     }
     
-    private func downloadContent(items: [Apod]) async throws {
+    public func downloadContent(items: [Apod]) async throws {
         for item in items {
             try? await FileStorage.shared.saveRemoteFile(imageUrl: item.imageUrl, fileName: item.id?.uuidString)
         }
