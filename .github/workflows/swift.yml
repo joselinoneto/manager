@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: "14.1"
+        xcode-version: latest
     steps:
     - uses: actions/checkout@v3
     - name: Build
