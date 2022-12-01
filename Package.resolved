@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/storageclient",
       "state" : {
-        "revision" : "1eebe0b5015791a74cde639d1694ffdc843aa88d",
-        "version" : "1.0.6"
+        "revision" : "c0d3baed19d84ed3adf0b63f8847a55fd7e1ac4f",
+        "version" : "1.0.7"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/ToolboxStorageClient",
       "state" : {
-        "revision" : "725f187548839b8b17236d6bb623ea53a16c7669",
-        "version" : "1.0.1"
+        "revision" : "9ec3d0288256cad21c2f57281d20e15f550c020d",
+        "version" : "1.0.2"
       }
     },
     {
