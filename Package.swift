@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/joselinoneto/apiclient", from: "1.0.0"),
-        .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", from: "5.3.0"),
+        .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", exact: "5.2.0"),
         .package(url: "https://github.com/joselinoneto/storageclient", from: "1.0.0"),
     ],
     targets: [
