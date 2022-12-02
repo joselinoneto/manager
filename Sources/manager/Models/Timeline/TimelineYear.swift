@@ -27,7 +27,7 @@ public class TimelineYear: Timeline, Identifiable, Hashable {
     public var months: [TimelineMonth]
     
     public static var currentYear: TimelineYear {
-        if let year = years.last {
+        if let year = years.first {
             return year
         } else {
             let date: Date = Date()

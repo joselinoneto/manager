@@ -46,9 +46,6 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
 
         guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
         guard let dateReturn = date.end(of: .month) else { return "" }
-        if dateReturn.isInFuture {
-            return formatter.string(from: Date())
-        }
         
         let formatedString: String = formatter.string(from: dateReturn)
         return formatedString
@@ -60,13 +57,10 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
         guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
         return date.string(withFormat: "MMMM, yyyy")
         }
-        set {
-            _title = newValue
-        }
     }
     
     public static var currentMonth: TimelineMonth {
-        if let month = TimelineYear.years.last?.months.last {
+        if let month = TimelineYear.years.first?.months.first {
             return month
         } else {
             let date: Date = Date()
