@@ -20,6 +20,7 @@ extension ApodStorage {
         self.init()
         self.id = item.id
         self.date = item.date
+        self.postedDate = item.postedDate
         self.explanation = item.explanation
         self.mediaType = item.mediaType
         self.thumbnailUrl = item.thumbnailUrl
