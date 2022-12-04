@@ -31,6 +31,11 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
         self._title = title
     }
 
+    public var startMonthDate: Date {
+        guard let date: Date = Date(year: year.value.int, month: value.int) else { return Date() }
+        return date.beginning(of: .month) ?? Date()
+    }
+    
     public var startMonth: String {
         guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
         let dateReturn = date.beginning(of: .month)
@@ -55,6 +60,11 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
         
         let formatedString: String = formatter.string(from: dateReturn)
         return formatedString
+    }
+    
+    public var endMonthDate: Date {
+        guard let date: Date = Date(year: year.value.int, month: value.int) else { return Date() }
+        return date.end(of: .month) ?? Date()
     }
     
     private var _title: String

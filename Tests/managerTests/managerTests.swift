@@ -46,20 +46,6 @@ final class managerTests: XCTestCase {
 
         try await controller.downloadContent(items: items)
     }
-
-    func testCrud() throws {
-        let controller = ApodManagerController(pathToSqlite: nil)
-        let mock = ApodStorage()
-        mock.id = UUID()
-        mock.title = "MockTitle"
-        mock.postedDate = Date()
-        try controller.saveItems([mock])
-
-        let items = try controller.getAll()
-
-        XCTAssertNotNil(items)
-        XCTAssertEqual(items?.first?.id, mock.id)
-    }
     
     func testLoginController() async throws {
         let controller = LoginManagerController.shared
@@ -69,6 +55,12 @@ final class managerTests: XCTestCase {
     }
     
     func testTimelineController() throws {
+        let startMonthDate: Date = TimelineMonth.currentMonth.startMonthDate
+        XCTAssertEqual(Date().beginning(of: .month), startMonthDate)
+        
+        let endMonthDate: Date = TimelineMonth.currentMonth.endMonthDate
+        XCTAssertEqual(Date().end(of: .month), endMonthDate)
+        
         let timelineYear = TimelineYear.currentYear
         XCTAssertEqual(Date().year.string, timelineYear.value)
         XCTAssertEqual(Date().month, timelineYear.months.count)
