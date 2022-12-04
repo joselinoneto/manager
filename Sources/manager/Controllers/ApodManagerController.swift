@@ -36,8 +36,8 @@ public class ApodManagerController {
                 .store(in: &self.cancellables)
 
             self.storageController
-                .observeApods(startDate: value.startMonth.date,
-                              endDate: value.endMonth.date)
+                .observeApods(startDate: value.startMonthDate,
+                              endDate: value.endMonthDate)
         }.store(in: &cancellables)
     }
     
