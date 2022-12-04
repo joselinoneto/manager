@@ -47,6 +47,12 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
         guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
         guard let dateReturn = date.end(of: .month) else { return "" }
         
+        if dateReturn.isInFuture {
+            let today: Date = Date()
+            let todayFormatedString: String = formatter.string(from: today)
+            return todayFormatedString
+        }
+        
         let formatedString: String = formatter.string(from: dateReturn)
         return formatedString
     }

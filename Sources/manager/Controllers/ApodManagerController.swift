@@ -69,15 +69,7 @@ public class ApodManagerController {
     
     public func downloadContent(items: [Apod]) async throws {
         for item in items {
-            try? await FileStorage.shared.saveRemoteFile(imageUrl: item.imageUrl, fileName: item.id?.uuidString)
+            try await FileStorage.shared.saveRemoteFile(imageUrl: item.imageUrl, fileName: item.id?.uuidString)
         }
-    }
-    
-    public func deleteItem(item: Apod) {
-        
-    }
-    
-    public func deleteAllData() async throws {
-        
     }
 }
