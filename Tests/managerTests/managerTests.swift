@@ -29,6 +29,37 @@ final class managerTests: XCTestCase {
         let array: [Apod]? = counterArray.last ?? []
         XCTAssertEqual(array?.first?.id, mock.id)
     }
+
+    func testRemoteData() async throws {
+        let controller = ApodManagerController(pathToSqlite: nil)
+        try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
+    }
+
+    func testRemotePageData() async throws {
+        let controller = ApodManagerController(pathToSqlite: nil)
+        try await controller.getRemoteData(per: 100, page: 1)
+    }
+
+    func testDownloadContent() async throws {
+        let controller = ApodManagerController(pathToSqlite: nil)
+        let items = Apod.mockItems
+
+        try await controller.downloadContent(items: items)
+    }
+
+    func testCrud() throws {
+        let controller = ApodManagerController(pathToSqlite: nil)
+        let mock = ApodStorage()
+        mock.id = UUID()
+        mock.title = "MockTitle"
+        mock.postedDate = Date()
+        try controller.saveItems([mock])
+
+        let items = try controller.getAll()
+
+        XCTAssertNotNil(items)
+        XCTAssertEqual(items?.first?.id, mock.id)
+    }
     
     func testLoginController() async throws {
         let controller = LoginManagerController.shared
@@ -49,8 +80,8 @@ final class managerTests: XCTestCase {
         let startMonth = Date().beginning(of: .month)?.string(withFormat: "yyyy-MM-dd")
         XCTAssertEqual(startMonth, timelineMonth.startMonth)
         
-        let endMonth = Date().end(of: .month)?.string(withFormat: "yyyy-MM-dd")
-        XCTAssertEqual(endMonth, timelineMonth.endMonth)
+        let endMonth = Date()
+        XCTAssertEqual(endMonth.day, timelineMonth.endMonth.date?.day)
         
         let firstYear = 2015
         let todayYear = Date().year
