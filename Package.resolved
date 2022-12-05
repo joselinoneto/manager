@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "8330469ac3cbbf0ee52b7e8a4e2b1f4c44bb13ea",
-        "version" : "6.4.0"
+        "revision" : "7b63ddf54232db97943759e2b022cf61c5d9e745",
+        "version" : "6.5.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/storageclient",
       "state" : {
-        "revision" : "c5f9b7bda2cb02e80780a6186246cea7f3257cca",
-        "version" : "1.0.9"
+        "revision" : "709a4829f4884ccc6f4a1a71a63a3894d8f85e5f",
+        "version" : "1.0.10"
       }
     },
     {

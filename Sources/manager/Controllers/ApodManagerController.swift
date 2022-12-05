@@ -13,7 +13,7 @@ import Combine
 
 public class ApodManagerController {
     @Published public var items: [Apod]?
-    @Published public var currentMonth: TimelineMonth = TimelineMonth.currentMonth
+    @Published public var currentMonth: TimelineMonth = TimelineMonth.defaultMonth
     
     private let apiController: NasaApodManagerAPI
     private let storageController: ApodStorageController
@@ -35,9 +35,11 @@ public class ApodManagerController {
                 .assign(to: \.items, on: self)
                 .store(in: &self.cancellables)
 
-            self.storageController
-                .observeApods(startDate: value.startMonthDate,
-                              endDate: value.endMonthDate)
+            if value != TimelineMonth.defaultMonth {
+                self.storageController
+                    .observeApods(startDate: value.startMonthDate,
+                                  endDate: value.endMonthDate)
+            }
         }.store(in: &cancellables)
     }
     
