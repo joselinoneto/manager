@@ -83,4 +83,8 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
             return TimelineMonth(value: date.month.string, year: .init(value: date.year.string, months: []), apods: [])
         }
     }
+    
+    public static var defaultMonth: TimelineMonth {
+        return TimelineMonth(value: "", year: .currentYear, apods: [])
+    }
 }

@@ -15,13 +15,17 @@ final class managerTests: XCTestCase {
     
     func testApodController() throws {
         let controller = ApodManagerController(pathToSqlite: nil)
+        Task(priority: .high) {
+            try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
+        }
+        
         let mock = ApodStorage()
         mock.id = UUID()
         mock.title = "MockTitle"
         mock.postedDate = Date()
         try controller.saveItems([mock])
         
-        let countEmittedExpected: Int = 3
+        let countEmittedExpected: Int = 4
         let apodPublisher = controller.$items.collect(countEmittedExpected).first()
         let counterArray = try awaitPublisher(apodPublisher)
         XCTAssertEqual(countEmittedExpected, counterArray.count)
