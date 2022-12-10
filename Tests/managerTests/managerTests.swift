@@ -14,7 +14,7 @@ final class managerTests: XCTestCase {
     }
     
     func testApodController() throws {
-        let controller = ApodManagerController(pathToSqlite: nil)
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
         Task(priority: .high) {
             try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
         }
@@ -34,18 +34,36 @@ final class managerTests: XCTestCase {
         XCTAssertEqual(array?.first?.id, mock.id)
     }
 
+    func testCrud() throws {
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
+        let countItems: Int = 10
+        
+        for _ in 1...countItems {
+            let mock = ApodStorage()
+            mock.id = UUID()
+            mock.title = "MockTitle"
+            mock.postedDate = Date()
+            try controller.saveItems([mock])
+        }
+        
+        let items: [ApodStorage]? = try controller.getAll()
+        
+        XCTAssertNotNil(items)
+        XCTAssertEqual(countItems, items?.count)
+    }
+    
     func testRemoteData() async throws {
-        let controller = ApodManagerController(pathToSqlite: nil)
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
         try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
     }
 
     func testRemotePageData() async throws {
-        let controller = ApodManagerController(pathToSqlite: nil)
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
         try await controller.getRemoteData(per: 100, page: 1)
     }
 
     func testDownloadContent() async throws {
-        let controller = ApodManagerController(pathToSqlite: nil)
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
         let items = Apod.mockItems
 
         try await controller.downloadContent(items: items)

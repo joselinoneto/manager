@@ -13,34 +13,27 @@ import Combine
 
 public class ApodManagerController {
     @Published public var items: [Apod]?
-    @Published public var currentMonth: TimelineMonth = TimelineMonth.defaultMonth
     
+    private let currentMonth: TimelineMonth
     private let apiController: NasaApodManagerAPI
     private let storageController: ApodStorageController
     private var cancellables: Set<AnyCancellable> = []
     
-    public init(pathToSqlite: String?) {
+    public init(currentMonth: TimelineMonth, pathToSqlite: String?) {
+        self.currentMonth = currentMonth
         apiController = NasaApodManagerAPI()
         storageController = ApodStorageController(pathToSqlite: pathToSqlite)
         getLocalData()
     }
     
     private func getLocalData() {
-        $currentMonth.receive(on: DispatchQueue.main).sink { [weak self] value in
-            guard let self = self else { return }
-
             self.storageController
                 .$items
                 .map{$0?.mapToEntity()}
                 .assign(to: \.items, on: self)
                 .store(in: &self.cancellables)
-
-            if value != TimelineMonth.defaultMonth {
-                self.storageController
-                    .observeApods(startDate: value.startMonthDate,
-                                  endDate: value.endMonthDate)
-            }
-        }.store(in: &cancellables)
+        
+        self.storageController.observeApods(startDate: currentMonth.startMonthDate, endDate: currentMonth.endMonthDate)
     }
     
     public func getRemoteData(per: Int, page: Int) async throws {
@@ -49,9 +42,7 @@ public class ApodManagerController {
     }
     
     public func getMonthData(currentMonth: TimelineMonth) async throws {
-        self.currentMonth = currentMonth
-        let response = try? await apiController.getMonthsApods(startDate: currentMonth.startMonth,
-                                                               endDate: currentMonth.endMonth)
+        let response = try? await apiController.getMonthsApods(startDate: currentMonth.startMonth, endDate: currentMonth.endMonth)
         try saveItems(response?.items)
     }
     
