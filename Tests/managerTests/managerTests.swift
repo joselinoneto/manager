@@ -148,7 +148,7 @@ final class managerTests: XCTestCase {
 extension XCTestCase {
     func awaitPublisher<T: Publisher>(
         _ publisher: T,
-        timeout: TimeInterval = 10,
+        timeout: TimeInterval = 120,
         file: StaticString = #file,
         line: UInt = #line
     ) throws -> T.Output {
