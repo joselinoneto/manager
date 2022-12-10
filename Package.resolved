@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/apiclient",
       "state" : {
-        "revision" : "ceb9577763b85b16925503fac381e27381f6ed04",
-        "version" : "1.0.0"
+        "revision" : "9490cc016430cf49bade172ea59f717d9b1ad395",
+        "version" : "1.0.1"
       }
     },
     {
@@ -66,10 +66,10 @@
     {
       "identity" : "tools",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:joselinoneto/tools.git",
+      "location" : "https://github.com/joselinoneto/tools",
       "state" : {
-        "revision" : "971f3003b819ef973455e0f3b51138c892db59fc",
-        "version" : "1.0.2"
+        "revision" : "23bf34a9012f515e78abaf84d42136ebaa74f3cf",
+        "version" : "1.0.4"
       }
     }
   ],
