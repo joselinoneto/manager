@@ -32,8 +32,6 @@ public class ApodManagerController {
                 .map{$0?.mapToEntity()}
                 .assign(to: \.items, on: self)
                 .store(in: &self.cancellables)
-        
-        self.storageController.observeApods(startDate: currentMonth.startMonthDate, endDate: currentMonth.endMonthDate)
     }
     
     public func getRemoteData(per: Int, page: Int) async throws {
