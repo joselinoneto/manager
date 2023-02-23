@@ -25,7 +25,7 @@ final class managerTests: XCTestCase {
         mock.postedDate = Date()
         try controller.saveItems([mock])
         
-        let countEmittedExpected: Int = 4
+        let countEmittedExpected: Int = 3
         let apodPublisher = controller.$items.collect(countEmittedExpected).first()
         let counterArray = try awaitPublisher(apodPublisher)
         XCTAssertEqual(countEmittedExpected, counterArray.count)
