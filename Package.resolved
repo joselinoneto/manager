@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "e76cda27dce9595a833a23cfd26bbc27553cd305",
-        "version" : "6.7.0"
+        "revision" : "d3862c042446d3025a8a4123b013e1b6d58fc315",
+        "version" : "6.8.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/storageclient",
       "state" : {
-        "revision" : "df4c3a893022b27694408c5ca828afe104ce95cd",
-        "version" : "1.0.11"
+        "revision" : "560fdbaf87766a80a0cb0dd13e7a8f98811f3e08",
+        "version" : "1.0.12"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/ToolboxStorageClient",
       "state" : {
-        "revision" : "62a2e86e0e022bd821cefc36787ccc2611fabda3",
-        "version" : "1.0.3"
+        "revision" : "8d6248ff790caeae43a0344f65ff2a9aa7418a86",
+        "version" : "1.0.5"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/tools",
       "state" : {
-        "revision" : "23bf34a9012f515e78abaf84d42136ebaa74f3cf",
-        "version" : "1.0.4"
+        "revision" : "d1b6ccc2948f8d474cd6ccd476380114021dc776",
+        "version" : "1.0.8"
       }
     }
   ],

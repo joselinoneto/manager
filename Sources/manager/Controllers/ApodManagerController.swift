@@ -26,32 +26,14 @@ public class ApodManagerController {
         getLocalData()
     }
     
-    private func getLocalData() {
-            self.storageController
-                .$items
-                .map{$0?.mapToEntity()}
-                .assign(to: \.items, on: self)
-                .store(in: &self.cancellables)
-    }
-    
     public func getRemoteData(per: Int, page: Int) async throws {
         let response = try? await apiController.getApods(per: per, page: page)
-        try saveItems(response?.items)
+        try await saveItems(response?.items)
     }
     
     public func getMonthData(currentMonth: TimelineMonth) async throws {
         let response = try? await apiController.getMonthsApods(startDate: currentMonth.startMonth, endDate: currentMonth.endMonth)
-        try saveItems(response?.items)
-    }
-    
-    public func saveItems(_ items: [NasaApodDto]?) throws {
-        let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-        try storageController.saveItems(itemsAdd)
-    }
-    
-    public func saveItems(_ items: [ApodStorage]?) throws {
-        guard let items = items else { return }
-        try storageController.saveItems(items)
+        try await saveItems(response?.items)
     }
     
     public func getAll() throws -> [ApodStorage]? {
@@ -61,6 +43,22 @@ public class ApodManagerController {
     public func downloadContent(items: [Apod]) async throws {
         for item in items {
             try await FileStorage.shared.saveRemoteFile(imageUrl: item.imageUrl, fileName: item.id?.uuidString)
+        }
+    }
+
+    // MARK: Private methdos
+    private func getLocalData() {
+            self.storageController
+                .$items
+                .map{$0?.mapToEntity()}
+                .assign(to: \.items, on: self)
+                .store(in: &self.cancellables)
+    }
+    
+    private func saveItems(_ items: [NasaApodDto]?) async throws {
+        let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
+        for item in itemsAdd {
+            try await storageController.asyncSaveItem(item)
         }
     }
 }

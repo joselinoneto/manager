@@ -13,53 +13,18 @@ final class managerTests: XCTestCase {
         cancellables = []
     }
     
-    func testApodController() throws {
-        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
-        Task(priority: .high) {
-            try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
-        }
-        
-        let mock = ApodStorage()
-        mock.id = UUID()
-        mock.title = "MockTitle"
-        mock.postedDate = Date()
-        try controller.saveItems([mock])
-        
-        let countEmittedExpected: Int = 3
-        let apodPublisher = controller.$items.collect(countEmittedExpected).first()
-        let counterArray = try awaitPublisher(apodPublisher)
-        XCTAssertEqual(countEmittedExpected, counterArray.count)
-        
-        let array: [Apod]? = counterArray.last ?? []
-        XCTAssertEqual(array?.first?.id, mock.id)
-    }
-
-    func testCrud() throws {
-        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
-        let countItems: Int = 10
-        
-        for _ in 1...countItems {
-            let mock = ApodStorage()
-            mock.id = UUID()
-            mock.title = "MockTitle"
-            mock.postedDate = Date()
-            try controller.saveItems([mock])
-        }
-        
-        let items: [ApodStorage]? = try controller.getAll()
-        
-        XCTAssertNotNil(items)
-        XCTAssertEqual(countItems, items?.count)
-    }
-    
     func testRemoteData() async throws {
         let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
         try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
+        let items = try controller.getAll()
+        XCTAssertNotNil(items)
     }
 
     func testRemotePageData() async throws {
         let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
         try await controller.getRemoteData(per: 100, page: 1)
+        let items = try controller.getAll()
+        XCTAssertNotNil(items)
     }
 
     func testDownloadContent() async throws {
