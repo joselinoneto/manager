@@ -57,8 +57,10 @@ public class ApodManagerController {
     
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-        for item in itemsAdd {
-            try await storageController.asyncSaveItem(item)
-        }
+        try storageController.saveItemsSql(itemsAdd)
+        self.items = try getAll()?.mapToEntity()
+        // for item in itemsAdd {
+        //    try await storageController.asyncSaveItem(item)
+        // }
     }
 }
