@@ -93,11 +93,11 @@ public class ApodManagerController {
 
     /// Observe storage data
     private func getLocalData() {
-            self.storageController
-                .$items
-                .map{$0?.mapToEntity()}
-                .assign(to: \.items, on: self)
-                .store(in: &self.cancellables)
+        self.storageController
+            .$items
+            .map{$0?.mapToEntity()}
+            .assign(to: \.items, on: self)
+            .store(in: &self.cancellables)
     }
 
     /// Save remote data locally
@@ -107,9 +107,6 @@ public class ApodManagerController {
         for item in itemsAdd {
             guard let id = item.id else { return }
             if try storageController.getApod(id: id) == nil {
-                if #available(macOS 13.0, *) {
-                    try await Task.sleep(for: Duration.seconds(0.5))
-                }
                 try await storageController.asyncSaveItem(item)
             }
         }
