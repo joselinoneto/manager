@@ -105,7 +105,13 @@ public class ApodManagerController {
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
         for item in itemsAdd {
-            try await storageController.asyncSaveItem(item)
+            guard let id = item.id else { return }
+            if try storageController.getApod(id: id) == nil {
+                if #available(macOS 13.0, *) {
+                    try await Task.sleep(for: Duration.seconds(0.5))
+                }
+                try await storageController.asyncSaveItem(item)
+            }
         }
     }
 
