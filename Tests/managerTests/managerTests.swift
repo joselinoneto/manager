@@ -14,21 +14,14 @@ final class managerTests: XCTestCase {
     }
     
     func testRemoteData() async throws {
-        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth)
         try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
         let items = try controller.getAll()
         XCTAssertNotNil(items)
     }
 
-    func testRemotePageData() async throws {
-        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
-        try await controller.getRemoteData(per: 100, page: 1)
-        let items = try controller.getAll()
-        XCTAssertNotNil(items)
-    }
-
     func testDownloadContent() async throws {
-        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth, pathToSqlite: nil)
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth)
         let items = Apod.mockItems
 
         try await controller.downloadContent(items: items)
@@ -39,6 +32,43 @@ final class managerTests: XCTestCase {
         let deviceId: String = UUID().uuidString
         let token = await controller.loginDevice(deviceId: deviceId)
         XCTAssertNotNil(token)
+    }
+
+    func testSearch() throws {
+        guard let month = TimelineYear.years.first?.months[1] else { return }
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth)
+
+        let allItems = try controller.getAll()
+        XCTAssertNotNil(allItems)
+
+        let items = try controller.searchLocalData(currentMonth: month)
+        XCTAssertNotNil(items)
+        XCTAssertNotEqual(items?.count, 0)
+    }
+
+    func testBatch() async throws {
+        guard let month = TimelineYear.years.first?.months[2] else {
+            XCTFail()
+            return
+        }
+        let controller = ApodManagerController(currentMonth: month)
+
+        try await controller.getMonthData(currentMonth: month)
+        let allItems = try controller.searchLocalData(currentMonth: month)
+        XCTAssertNotNil(allItems)
+    }
+
+    func testGetId() async throws {
+        let controller = ApodManagerController(currentMonth: TimelineMonth.currentMonth)
+
+        try await controller.getMonthData(currentMonth: TimelineMonth.currentMonth)
+        let allItems = try controller.getAll()
+        guard let id = allItems?.first?.id else {
+            XCTFail()
+            return
+        }
+        let item = try controller.getApod(id: id)
+        XCTAssertEqual(allItems?.first?.id, item?.id)
     }
     
     func testTimelineController() throws {

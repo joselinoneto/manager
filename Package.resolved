@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/joselinoneto/storageclient",
       "state" : {
-        "revision" : "560fdbaf87766a80a0cb0dd13e7a8f98811f3e08",
-        "version" : "1.0.12"
+        "revision" : "e2609b4b2fe91ef613e4778fd44a19c5addab0fa",
+        "version" : "1.0.19"
       }
     },
     {
