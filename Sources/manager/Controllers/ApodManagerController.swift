@@ -104,6 +104,12 @@ public class ApodManagerController {
     /// - Parameter items: Remote Items
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
+
+        let tempItems = itemsAdd.mapToEntity()
+        DispatchQueue.main.async { [weak self] in
+            self?.items = tempItems
+        }
+
         for item in itemsAdd {
             guard let id = item.id else { return }
             if try storageController.getApod(id: id) == nil {
@@ -119,8 +125,8 @@ public class ApodManagerController {
         try storageController.saveItemsSql(itemsAdd)
         let returnItems = try getAll()
 
-        DispatchQueue.main.async {
-            self.items = returnItems
+        DispatchQueue.main.async { [weak self] in
+            self?.items = returnItems
         }
     }
 }
