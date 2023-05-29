@@ -25,7 +25,10 @@ public struct Apod: Identifiable, Hashable {
     public var url: String?
     public var hdurl: String?
     public var copyright: String?
-    
+
+    public init() {
+    }
+
     init(_ item: NasaApodDto) {
         self.id = item.id
         self.date = item.date
@@ -48,18 +51,6 @@ public struct Apod: Identifiable, Hashable {
         self.url = item.url
         self.hdurl = item.hdurl
         self.copyright = item.copyright
-    }
-    
-    init() {
-        self.id = nil
-        self.date = nil
-        self.explanation = nil
-        self.mediaType = nil
-        self.thumbnailUrl = nil
-        self.title = nil
-        self.url = nil
-        self.hdurl = nil
-        self.copyright = nil
     }
     
     //MARK: Computed Properties
@@ -99,6 +90,11 @@ public struct Apod: Identifiable, Hashable {
             guard let thumbnailUrl = thumbnailUrl else { return nil }
             return URL(string: thumbnailUrl)
         }
+    }
+
+    public var videoUrl: URL? {
+        guard let url = url else { return nil }
+        return URL(string: url)
     }
     
     public var imageHdUrl: URL? {
