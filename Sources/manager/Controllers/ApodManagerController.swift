@@ -51,40 +51,17 @@ public class ApodManagerController {
     /// Will emit saved data.
     /// - Parameter currentMonth: Month to search data
     public func getMonthData(currentMonth: TimelineMonth) async throws {
-        Task.retrying { [weak self] in
-            let response = try await self?.apiController.getMonthsApods(startDate: currentMonth.startMonth, endDate: currentMonth.endMonth)
-            if currentMonth == TimelineMonth.currentMonth {
-                try await self?.saveItems(response?.items)
-            } else {
-                try await self?.saveItemsBatch(response?.items, currentMonth: currentMonth)
+        let items = try storageController.searchApods(startMonth: currentMonth.startMonth, endMonth: currentMonth.endMonth)
+        if let apodItems = items?.mapToEntity() {
+            DispatchQueue.main.async { [weak self] in
+                self?.items = apodItems
             }
         }
-    }
 
-    private func handleError(_ error: Error) async throws {
-
-    }
-
-    /// Get All Data
-    /// - Returns: Returns an array of Apods
-    public func getAll() throws -> [Apod]? {
-        try storageController.getAllItems()?.mapToEntity()
-    }
-
-    /// Search locally Apod using date
-    /// - Parameter currentMonth: TimelineMonth to search
-    /// - Returns: Returns a locally Apod array
-    public func searchLocalData(currentMonth: TimelineMonth) throws -> [Apod]? {
-        let items = try storageController.searchApods(startMonth: currentMonth.startMonth, endMonth: currentMonth.endMonth)
-        guard let items = items else { return nil }
-        return items.mapToEntity()
-    }
-
-    /// Search locally Apod using ID
-    /// - Parameter id: ID to search
-    /// - Returns: Returns a locally Apod
-    public func getApod(id: UUID) throws -> Apod? {
-        try storageController.getApod(id: id)?.mapToEntity()
+        Task.retrying { [weak self] in
+            let response = try await self?.apiController.getMonthsApods(startDate: currentMonth.startMonth, endDate: currentMonth.endMonth)
+            try await self?.saveItems(response?.items)
+        }
     }
 
     /// Download images and save in Documents Folder
@@ -110,51 +87,25 @@ public class ApodManagerController {
     /// - Parameter items: Remote Items
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-
-        let tempItems = itemsAdd.mapToEntity()
-        DispatchQueue.main.async { [weak self] in
-            self?.items = tempItems
-        }
-
-        for item in itemsAdd {
-            guard let id = item.id else { return }
-            if try storageController.getApod(id: id) == nil {
-                try storageController.saveItemsSql([item])
-            }
-        }
-    }
-
-    /// Save remote data locally
-    /// - Parameter items: Remote Items
-    private func saveItemsBatch(_ items: [NasaApodDto]?, currentMonth: TimelineMonth) async throws {
-        let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-        try storageController.saveItemsSql(itemsAdd)
-        let returnItems = try searchLocalData(currentMonth: currentMonth)
-
-        DispatchQueue.main.async { [weak self] in
-            self?.items = returnItems
-        }
+        try await storageController.saveItemsSql(itemsAdd)
     }
 }
 
 extension Task where Failure == Error {
     @discardableResult
-    static func retrying(
-        priority: TaskPriority? = nil,
-        maxRetryCount: Int = 3,
-        operation: @Sendable @escaping () async throws -> Success
-    ) -> Task {
+    static func retrying(priority: TaskPriority? = nil,
+                         maxRetryCount: Int = 3,
+                         operation: @Sendable @escaping () async throws -> Success) -> Task {
         Task(priority: priority) {
             for _ in 0..<maxRetryCount {
                 try Task<Never, Never>.checkCancellation()
-
                 do {
                     return try await operation()
                 } catch {
                     guard let apiError = error as? APIErrors else { throw error }
                     switch apiError {
                     case .authenticationError:
-                        await LoginManagerController.shared.loginDevice()
+                        await LoginManagerController.shared.loginDevice(deviceId: UUID().uuidString)
                     default:
                         throw error
                     }
