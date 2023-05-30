@@ -13,11 +13,9 @@ public class LoginManagerController {
     public static let shared: LoginManagerController = LoginManagerController()
     private let loginController: LoginManagerAPI = LoginManagerAPI()
     
-    public func loginDevice(deviceId: String) async -> String? {
+    public func loginDevice(deviceId: String) async {
         let login = try? await loginController.deviceLogin(deviceId: deviceId)
-        guard let token = login?.token else { return nil }
-        let key: String = ConfigLoader.shared.appConfig.token
-        try? KeychainStorage.shared.set(newValue: token, forKey: key)
-        return token
+        guard let token = login?.token else { return }
+        KeychainStorage.shared.accessToken = token
     }
 }

@@ -32,12 +32,12 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
     }
 
     public var startMonthDate: Date {
-        guard let date: Date = Date(year: year.value.int, month: value.int) else { return Date() }
+        guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return Date() }
         return date.beginning(of: .month) ?? Date()
     }
     
     public var startMonth: String {
-        guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
+        guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return "" }
         let dateReturn = date.beginning(of: .month)
         let formatedString: String = dateReturn?.string(withFormat: "yyyy-MM-dd") ?? ""
         return formatedString
@@ -49,7 +49,7 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
         formatter.locale = Locale(identifier: "UTC")
         formatter.timeZone = TimeZone(abbreviation: "UTC")
 
-        guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
+        guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return "" }
         guard let dateReturn = date.end(of: .month) else { return "" }
         
         if dateReturn.isInFuture {
@@ -63,24 +63,26 @@ public class TimelineMonth: Timeline, Identifiable, Hashable {
     }
     
     public var endMonthDate: Date {
-        guard let date: Date = Date(year: year.value.int, month: value.int) else { return Date() }
+        guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return Date() }
         return date.end(of: .month) ?? Date()
     }
     
     private var _title: String
     public var title: String {
         get {
-        guard let date: Date = Date(year: year.value.int, month: value.int) else { return "" }
-        return date.string(withFormat: "MMMM, yyyy")
+            guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return "" }
+            return date.string(withFormat: "MMMM, yyyy")
         }
     }
-    
+
     public static var currentMonth: TimelineMonth {
         if let month = TimelineYear.years.first?.months.first {
             return month
         } else {
             let date: Date = Date()
-            return TimelineMonth(value: date.month.string, year: .init(value: date.year.string, months: []), apods: [])
+            return TimelineMonth(value: date.month.string,
+                                 year: .init(value: date.year.string, months: []),
+                                 apods: [])
         }
     }
     

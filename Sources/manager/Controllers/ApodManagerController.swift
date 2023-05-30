@@ -11,6 +11,7 @@ import storageclient
 import tools
 import Combine
 import GRDB
+import ToolboxAPIClient
 
 public class ApodManagerController {
     // MARK: Published Items
@@ -50,35 +51,17 @@ public class ApodManagerController {
     /// Will emit saved data.
     /// - Parameter currentMonth: Month to search data
     public func getMonthData(currentMonth: TimelineMonth) async throws {
-        let response = try? await apiController.getMonthsApods(startDate: currentMonth.startMonth, endDate: currentMonth.endMonth)
-
-        if TimelineMonth.currentMonth == currentMonth {
-            try await saveItems(response?.items)
-        } else {
-            try await saveItemsBatch(response?.items)
-        }
-    }
-
-    /// Get All Data
-    /// - Returns: Returns an array of Apods
-    public func getAll() throws -> [Apod]? {
-        try storageController.getAllItems()?.mapToEntity()
-    }
-
-    /// Search locally Apod using date
-    /// - Parameter currentMonth: TimelineMonth to search
-    /// - Returns: Returns a locally Apod array
-    public func searchLocalData(currentMonth: TimelineMonth) throws -> [Apod]? {
         let items = try storageController.searchApods(startMonth: currentMonth.startMonth, endMonth: currentMonth.endMonth)
-        guard let items = items else { return nil }
-        return items.mapToEntity()
-    }
+        if let apodItems = items?.mapToEntity() {
+            DispatchQueue.main.async { [weak self] in
+                self?.items = apodItems
+            }
+        }
 
-    /// Search locally Apod using ID
-    /// - Parameter id: ID to search
-    /// - Returns: Returns a locally Apod
-    public func getApod(id: UUID) throws -> Apod? {
-        try storageController.getApod(id: id)?.mapToEntity()
+        Task.retrying { [weak self] in
+            let response = try await self?.apiController.getMonthsApods(startDate: currentMonth.startMonth, endDate: currentMonth.endMonth)
+            try await self?.saveItems(response?.items)
+        }
     }
 
     /// Download images and save in Documents Folder
@@ -104,29 +87,34 @@ public class ApodManagerController {
     /// - Parameter items: Remote Items
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-
-        let tempItems = itemsAdd.mapToEntity()
-        DispatchQueue.main.async { [weak self] in
-            self?.items = tempItems
-        }
-
-        for item in itemsAdd {
-            guard let id = item.id else { return }
-            if try storageController.getApod(id: id) == nil {
-                try await storageController.asyncSaveItem(item)
-            }
-        }
+        try await storageController.saveItemsSql(itemsAdd)
     }
+}
 
-    /// Save remote data locally
-    /// - Parameter items: Remote Items
-    private func saveItemsBatch(_ items: [NasaApodDto]?) async throws {
-        let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-        try storageController.saveItemsSql(itemsAdd)
-        let returnItems = try getAll()
+extension Task where Failure == Error {
+    @discardableResult
+    static func retrying(priority: TaskPriority? = nil,
+                         maxRetryCount: Int = 3,
+                         operation: @Sendable @escaping () async throws -> Success) -> Task {
+        Task(priority: priority) {
+            for _ in 0..<maxRetryCount {
+                try Task<Never, Never>.checkCancellation()
+                do {
+                    return try await operation()
+                } catch {
+                    guard let apiError = error as? APIErrors else { throw error }
+                    switch apiError {
+                    case .authenticationError:
+                        await LoginManagerController.shared.loginDevice(deviceId: UUID().uuidString)
+                    default:
+                        throw error
+                    }
+                    continue
+                }
+            }
 
-        DispatchQueue.main.async { [weak self] in
-            self?.items = returnItems
+            try Task<Never, Never>.checkCancellation()
+            return try await operation()
         }
     }
 }
