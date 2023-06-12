@@ -8,7 +8,7 @@
 import Foundation
 import SwifterSwift
 
-public class TimelineYear: Timeline, Identifiable, Hashable {
+public class TimelineYear: ApodTimeline, Identifiable, Hashable {
     public static func == (lhs: TimelineYear, rhs: TimelineYear) -> Bool {
         lhs.value == rhs.value
     }

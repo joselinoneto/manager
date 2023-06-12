@@ -12,17 +12,17 @@ import tools
 import Combine
 import GRDB
 import ToolboxAPIClient
+// import OSLog
 
 public class ApodManagerController {
+    // private let logger = Logger(subsystem: "manager", category: "update favorite")
+
     // MARK: Published Items
 
     /// Publisehd Apod Items, will emit when new apods are saved.
     @Published public var items: [Apod]?
 
     // MARK: Local properties
-
-    /// Current month used to update data
-    private let currentMonth: TimelineMonth
 
     /// API Controller
     private let apiController: NasaApodManagerAPI
@@ -37,8 +37,7 @@ public class ApodManagerController {
 
     /// Init Manager using month
     /// - Parameter currentMonth: Current Month
-    public init(currentMonth: TimelineMonth) {
-        self.currentMonth = currentMonth
+    public init() {
         apiController = NasaApodManagerAPI()
         storageController = ApodStorageController()
         getLocalData()
@@ -72,6 +71,20 @@ public class ApodManagerController {
         }
     }
 
+    public func updateFavorite(apod: Apod) async throws {
+        if let id = apod.id, let storage = try storageController.getApod(id: id) {
+            storage.isFavorite?.toggle()
+            try await storageController.asyncSaveItem(storage)
+        }
+    }
+
+    public func searchFavorites() throws -> [Apod]? {
+        try storageController.searchFavorites()?.mapToEntity()
+    }
+
+    public func searchApods(_ text: String) throws -> [Apod]? {
+        text.isEmpty ? nil : try storageController.searchApods(text)?.mapToEntity()
+    }
     // MARK: Private methdos
 
     /// Observe storage data
@@ -87,7 +100,7 @@ public class ApodManagerController {
     /// - Parameter items: Remote Items
     private func saveItems(_ items: [NasaApodDto]?) async throws {
         let itemsAdd: [ApodStorage] = items?.map { ApodStorage($0) } ?? []
-        try await storageController.saveItemsSql(itemsAdd)
+        try await storageController.saveItems(itemsAdd)
     }
 }
 

@@ -7,11 +7,11 @@
 
 import Foundation
 
-public protocol Timeline {
+public protocol ApodTimeline {
     var value: String { get set }
 }
 
-public class TimelineMonth: Timeline, Identifiable, Hashable {
+public class TimelineMonth: ApodTimeline, Identifiable, Hashable {
     public static func == (lhs: TimelineMonth, rhs: TimelineMonth) -> Bool {
         lhs.id == rhs.id
     }

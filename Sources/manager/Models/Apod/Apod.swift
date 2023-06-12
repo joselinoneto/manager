@@ -18,6 +18,7 @@ public struct Apod: Identifiable, Hashable {
     
     public var id: UUID?
     public var date: String?
+    public var postedDate: Date?
     public var explanation: String?
     public var mediaType: String?
     public var thumbnailUrl: String?
@@ -25,13 +26,16 @@ public struct Apod: Identifiable, Hashable {
     public var url: String?
     public var hdurl: String?
     public var copyright: String?
+    public var isFavorite: Bool
 
     public init() {
+        isFavorite = false
     }
 
     init(_ item: NasaApodDto) {
         self.id = item.id
         self.date = item.date
+        self.postedDate = item.postedDate
         self.explanation = item.explanation
         self.mediaType = item.mediaType
         self.thumbnailUrl = item.thumbnailUrl
@@ -39,11 +43,13 @@ public struct Apod: Identifiable, Hashable {
         self.url = item.url
         self.hdurl = item.hdurl
         self.copyright = item.copyright
+        self.isFavorite = false
     }
     
     init(_ item: ApodStorage) {
         self.id = item.id
         self.date = item.date
+        self.postedDate = item.postedDate
         self.explanation = item.explanation
         self.mediaType = item.mediaType
         self.thumbnailUrl = item.thumbnailUrl
@@ -51,6 +57,7 @@ public struct Apod: Identifiable, Hashable {
         self.url = item.url
         self.hdurl = item.hdurl
         self.copyright = item.copyright
+        self.isFavorite = item.isFavorite ?? false
     }
     
     //MARK: Computed Properties
