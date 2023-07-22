@@ -11,12 +11,18 @@ import apiclient
 import storageclient
 
 //TODO: Remove downloadfile method and weak reference and change apod to struct
-public struct Apod: Identifiable, Hashable {
+public struct Apod: Codable, Identifiable, Hashable {
     public static func == (lhs: Apod, rhs: Apod) -> Bool {
-        lhs.id == rhs.id
+        lhs.id == rhs.id &&
+        lhs.isFavorite == rhs.isFavorite
     }
-    
-    public var id: UUID?
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(isFavorite)
+    }
+
+    public var id: UUID
     public var date: String?
     public var postedDate: Date?
     public var explanation: String?
@@ -29,6 +35,7 @@ public struct Apod: Identifiable, Hashable {
     public var isFavorite: Bool
 
     public init() {
+        id = UUID()
         isFavorite = false
     }
 
@@ -83,8 +90,7 @@ public struct Apod: Identifiable, Hashable {
     
     public var imageUrl: URL? {
         // Local copy
-        guard let id = id?.uuidString else { return nil }
-        if let localUrl = FileStorage.shared.getLocalFile(fileName: id) {
+        if let localUrl = FileStorage.shared.getLocalFile(fileName: id.uuidString) {
             return localUrl
         }
         
@@ -106,8 +112,7 @@ public struct Apod: Identifiable, Hashable {
     
     public var imageHdUrl: URL? {
         // Local copy
-        guard let id = id?.uuidString else { return nil }
-        let localHdFile: String = "\(id)\(hdSufix)"
+        let localHdFile: String = "\(id.uuidString)\(hdSufix)"
         if let localUrl = FileStorage.shared.getLocalFile(fileName: localHdFile) {
             return localUrl
         }

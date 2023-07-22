@@ -6,12 +6,13 @@
 //
 
 import Foundation
+import storageclient
 
-public protocol ApodTimeline {
+public protocol ApodTimeline: Codable {
     var value: String { get set }
 }
 
-public class TimelineMonth: ApodTimeline, Identifiable, Hashable {
+public class TimelineMonth: Codable, ApodTimeline, Identifiable, Hashable {
     public static func == (lhs: TimelineMonth, rhs: TimelineMonth) -> Bool {
         lhs.id == rhs.id
     }
@@ -22,12 +23,23 @@ public class TimelineMonth: ApodTimeline, Identifiable, Hashable {
     public var value: String
     public var id: String { title }
     public var year: TimelineYear
-    public var apods: [Apod]
-    
+
+    private var _apods: [Apod]? = []
+    public var apods: [Apod]? {
+        get {
+            let storage = ApodStorageController()
+            let items = try? storage.searchApods(startMonth: self.startMonth, endMonth: self.endMonth)?.mapToEntity() ?? []
+            return items
+        }
+        set {
+            _apods = newValue
+        }
+    }
+
     public init(value: String, title: String = "", year: TimelineYear, apods: [Apod]) {
         self.value = value
         self.year = year
-        self.apods = apods
+        self._apods = apods
         self._title = title
     }
 
