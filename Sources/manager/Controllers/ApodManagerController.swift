@@ -13,6 +13,8 @@ import GRDB
 import ToolboxAPIClient
 import OSLog
 import SwifterSwift
+import CoreSpotlight
+import MobileCoreServices
 
 public class ApodManagerController {
     // MARK: Local properties
@@ -85,6 +87,20 @@ public class ApodManagerController {
 
     public func getApods(month: TimelineMonth?) -> [Apod]? {
         return try? storageController.searchApods(startMonth: month?.startMonth, endMonth: month?.endMonth)?.mapToEntity()
+    }
+
+    public func syncData() async throws {
+        let years = TimelineYear.years
+        for year in years {
+            for month in year.months {
+                try await getMonthData(currentMonth: month)
+            }
+        }
+    }
+
+    public func deleteAllData() async throws {
+        try await 
+        try await storageController.deleteAllData()
     }
 
     // MARK: Private methdos

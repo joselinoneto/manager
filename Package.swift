@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SwifterSwift/SwifterSwift.git", exact: "5.2.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.0.0"),
         .package(path: "../apiclient"),
         .package(path: "../storageclient")
     ],
@@ -24,6 +25,7 @@ let package = Package(
             name: "manager",
             dependencies: [
                 "SwifterSwift",
+                "Kingfisher",
                 "apiclient",
                 "storageclient"
             ]),

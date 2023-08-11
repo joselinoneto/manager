@@ -13,4 +13,9 @@ public class TimelineController {
     public init() {
         timeline = TimelineYear.years
     }
+
+    public func reload() {
+        timeline.removeAll()
+        timeline = TimelineYear.years
+    }
 }
