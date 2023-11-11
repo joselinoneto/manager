@@ -28,7 +28,6 @@ extension ApodStorage {
         self.url = item.url
         self.hdurl = item.hdurl
         self.copyright = item.copyright
-        self.isFavorite = false
     }
 
     func mapToEntity() -> Apod {

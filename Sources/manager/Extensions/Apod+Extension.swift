@@ -33,11 +33,11 @@ extension Apod {
 
     public var imageResource: Resource? {
         guard let imageUrl = self.localImageUrl else { return nil }
-        return Kingfisher.ImageResource(downloadURL: imageUrl, cacheKey: id.uuidString)
+        return Kingfisher.ImageResource(downloadURL: imageUrl, cacheKey: String(id ?? 0))
     }
 
     public var canShareImage: Bool {
-        return FileStorage.shared.getLocalFile(fileName: id.uuidString) != nil
+        return FileStorage.shared.getLocalFile(fileName: String(id ?? 0)) != nil
     }
 
     public static var mockItems: [Apod] {

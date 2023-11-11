@@ -22,7 +22,7 @@ public struct Apod: Codable, Identifiable, Hashable {
         hasher.combine(isFavorite)
     }
 
-    public var id: UUID
+    public var id: Int?
     public var date: String?
     public var postedDate: Date?
     public var explanation: String?
@@ -35,7 +35,6 @@ public struct Apod: Codable, Identifiable, Hashable {
     public var isFavorite: Bool
 
     public init() {
-        id = UUID()
         isFavorite = false
     }
 
@@ -64,7 +63,7 @@ public struct Apod: Codable, Identifiable, Hashable {
         self.url = item.url
         self.hdurl = item.hdurl
         self.copyright = item.copyright
-        self.isFavorite = item.isFavorite ?? false
+        self.isFavorite = item.isFavorite
     }
     
     //MARK: Computed Properties
@@ -90,7 +89,7 @@ public struct Apod: Codable, Identifiable, Hashable {
     
     public var imageUrl: URL? {
         // Local copy
-        if let localUrl = FileStorage.shared.getLocalFile(fileName: id.uuidString) {
+        if let localUrl = FileStorage.shared.getLocalFile(fileName: String(id ?? 0)) {
             return localUrl
         }
         
@@ -112,7 +111,7 @@ public struct Apod: Codable, Identifiable, Hashable {
     
     public var imageHdUrl: URL? {
         // Local copy
-        let localHdFile: String = "\(id.uuidString)\(hdSufix)"
+        let localHdFile: String = "\(id)\(hdSufix)"
         if let localUrl = FileStorage.shared.getLocalFile(fileName: localHdFile) {
             return localUrl
         }

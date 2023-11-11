@@ -18,4 +18,8 @@ public class LoginManagerController {
         guard let token = login?.token else { return }
         KeychainStorage.shared.accessToken = token
     }
+
+    public func logout() {
+        try? KeychainStorage.shared.clearStorage()
+    }
 }

@@ -28,7 +28,7 @@ public class TimelineMonth: Codable, ApodTimeline, Identifiable, Hashable {
     public var apods: [Apod]? {
         get {
             let storage = ApodStorageController()
-            let items = try? storage.searchApods(startMonth: self.startMonth, endMonth: self.endMonth)?.mapToEntity() ?? []
+            let items = try? storage.searchApods(startMonth: self.startMonth)?.mapToEntity() ?? []
             return items
         }
         set {
@@ -49,31 +49,66 @@ public class TimelineMonth: Codable, ApodTimeline, Identifiable, Hashable {
     }
     
     public var startMonth: String {
-        guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return "" }
-        let dateReturn = date.beginning(of: .month)
-        let formatedString: String = dateReturn?.string(withFormat: "yyyy-MM-dd") ?? ""
+        let utcDateFormatter = DateFormatter()
+        utcDateFormatter.dateFormat = "yyyy-MM-dd"
+
+        // The default timeZone on DateFormatter is the device’s
+        // local time zone. Set timeZone to UTC to get UTC time.
+        utcDateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        guard let date = utcDateFormatter.date(from: "\(year.value)-\(value)-01") else { return ""}
+
+        let formatedString: String = utcDateFormatter.string(from: date)
         return formatedString
     }
     
     public var endMonth: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.locale = Locale(identifier: "UTC")
-        formatter.timeZone = TimeZone(abbreviation: "UTC")
+        let utcDateFormatter = DateFormatter()
+        utcDateFormatter.dateFormat = "yyyy-MM-dd"
 
-        guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return "" }
-        guard let dateReturn = date.end(of: .month) else { return "" }
-        
-        if dateReturn.isInFuture {
-            let today: Date = Date()
-            let todayFormatedString: String = formatter.string(from: today)
-            return todayFormatedString
+        guard let timeZone = TimeZone(abbreviation: "UTC") else { return ""}
+        utcDateFormatter.timeZone = timeZone
+
+        guard let date = utcDateFormatter.date(from: "\(year.value)-\(value)-01") else { return ""}
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+
+        if var dateReturn = calendar.date(byAdding: .month, value: 1, to: date) {
+            dateReturn = calendar.date(byAdding: .second, value: -1, to: dateReturn) ?? Date()
+
+            if dateReturn.isInFuture {
+                let today: Date = Date()
+                let todayFormatedString: String = utcDateFormatter.string(from: today)
+                return todayFormatedString
+            }
+
+            let formatedString: String = utcDateFormatter.string(from: dateReturn)
+            return formatedString
         }
-        
-        let formatedString: String = formatter.string(from: dateReturn)
-        return formatedString
+        return ""
     }
-    
+
+    public var numberDaysInCurrentMonth: Int? {
+        let utcDateFormatter = DateFormatter()
+        utcDateFormatter.dateFormat = "yyyy-MM-dd"
+
+        guard let timeZone = TimeZone(abbreviation: "UTC") else { return nil }
+        utcDateFormatter.timeZone = timeZone
+
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+
+        guard let startDate = utcDateFormatter.date(from: startMonth) else { return nil }
+        
+        if calendar.isDate(startDate, equalTo: Date(), toGranularity: .month) {
+            let today = calendar.component(.day, from: Date())
+            return today
+        }
+
+        let days = calendar.range(of: .day, in: .month, for: startDate)
+        return days?.count
+    }
+
     public var endMonthDate: Date {
         guard let date: Date = Date(year: year.value.int, month: value.int, day: 1) else { return Date() }
         return date.end(of: .month) ?? Date()
